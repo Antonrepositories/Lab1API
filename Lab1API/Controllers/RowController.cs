@@ -99,6 +99,22 @@ namespace Lab1API.Controllers
 			if (row == null) return NotFound();
 			return row;
 		}
+		[HttpGet]
+		public IActionResult GetRowsByPattern(int tableId, string pattern)
+		{
+			var table = _context.Tables
+								.Include(t => t.Rows)  
+								.FirstOrDefault(t => t.Id == tableId);
+
+			if (table == null)
+			{
+				return NotFound(new { message = "Table not found" });
+			}
+
+			var rows = table.Rows.Where(r => r.RowData.Contains(pattern));
+
+			return Ok(rows);
+		}
 
 		[HttpDelete("{id}")]
 		public async Task<IActionResult> DeleteRow(int id)

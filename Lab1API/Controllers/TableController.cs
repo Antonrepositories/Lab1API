@@ -40,6 +40,12 @@ namespace Lab1API.Controllers
 			{
 				return BadRequest("Database not found.");
 			}
+			var tables = _context.Tables.Where(t => t.Database == database);
+			var table = tables.Where(t => t.Name == model.Name).ToList();
+			if (tables.Any()) 
+			{
+				return BadRequest($"Table '{model.Name}' already exists.");
+			}
 
 			model.Database = database;
 
